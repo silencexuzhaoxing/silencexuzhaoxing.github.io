@@ -5,18 +5,18 @@
   
 
   
-  <title>Hexo</title>
+  <title>linux firewall | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="一、查看防火墙状态1、首先查看防火墙是否开启，如未开启，需要先开启防火墙并作开机自启 systemctl status firewalld 开启防火墙并设置开机自启 systemctl start firewalldsystemctl enable firewalld一般需要重启一下机器，不然后面做的设置可能不会生效 二、开放或限制端口1、开放端口（1）如我们需要开启XShell连接时需要使用的2">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/2019/12/04/linux防火墙命令/index.html">
+<meta property="og:title" content="linux firewall">
+<meta property="og:url" content="http://yoursite.com/2019/12/04/linux-firewall/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="一、查看防火墙状态1、首先查看防火墙是否开启，如未开启，需要先开启防火墙并作开机自启 systemctl status firewalld 开启防火墙并设置开机自启 systemctl start firewalldsystemctl enable firewalld一般需要重启一下机器，不然后面做的设置可能不会生效 二、开放或限制端口1、开放端口（1）如我们需要开启XShell连接时需要使用的2">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-12-04T05:36:28.614Z">
+<meta property="og:updated_time" content="2019-12-04T05:47:37.238Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="linux firewall">
 <meta name="twitter:description" content="一、查看防火墙状态1、首先查看防火墙是否开启，如未开启，需要先开启防火墙并作开机自启 systemctl status firewalld 开启防火墙并设置开机自启 systemctl start firewalldsystemctl enable firewalld一般需要重启一下机器，不然后面做的设置可能不会生效 二、开放或限制端口1、开放端口（1）如我们需要开启XShell连接时需要使用的2">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -64,19 +64,72 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-linux防火墙命令" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-linux-firewall" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/12/04/linux防火墙命令/" class="article-date">
-  <time datetime="2019-12-04T05:35:39.291Z" itemprop="datePublished">2019-12-04</time>
+    <a href="/2019/12/04/linux-firewall/" class="article-date">
+  <time datetime="2019-12-04T05:47:26.000Z" itemprop="datePublished">2019-12-04</time>
 </a>
     
   </div>
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      linux firewall
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
         <p>一、查看防火墙状态<br>1、首先查看防火墙是否开启，如未开启，需要先开启防火墙并作开机自启</p>
+<p>systemctl status firewalld</p>
+<p>开启防火墙并设置开机自启</p>
+<p>systemctl start firewalld<br>systemctl enable firewalld<br>一般需要重启一下机器，不然后面做的设置可能不会生效</p>
+<p>二、开放或限制端口<br>1、开放端口<br>（1）如我们需要开启XShell连接时需要使用的22端口</p>
+<p>firewall-cmd –zone=public –add-port=22/tcp –permanent</p>
+<p>其中–permanent的作用是使设置永久生效，不加的话机器重启之后失效</p>
+<p>（2）重新载入一下防火墙设置，使设置生效</p>
+<p>firewall-cmd –reload</p>
+<p>（3）可通过如下命令查看是否生效</p>
+<p>firewall-cmd –zone=public –query-port=22/tcp</p>
+<p>（4）如下命令可查看当前系统打开的所有端口</p>
+<p>firewall-cmd –zone=public –list-ports</p>
+<p>2、限制端口<br>（1）比如我们现在需要关掉刚刚打开的22端口</p>
+<p>firewall-cmd –zone=public –remove-port=22/tcp –permanent</p>
+<p>（2）重新载入一下防火墙设置，使设置生效</p>
+<p>firewall-cmd –reload</p>
+<p>（3）再去查看系统所有开放的端口，已经看到没有22端口了</p>
+<p>firewall-cmd –zone=public –list-ports</p>
+<p>3、批量开放或限制端口<br>（1）批量开放端口，如从100到500这之间的端口我们全部要打开</p>
+<p>firewall-cmd –zone=public –add-port=100-500/tcp –permanent</p>
+<p>（2）重新载入一下防火墙设置，使设置生效</p>
+<p>firewall-cmd –reload</p>
+<p>（3）查看系统所有开放的端口，可以看到从100到500的端口已被全部开放</p>
+<p>firewall-cmd –zone=public –list-ports</p>
+<p>（4）同理，批量限制端口为</p>
+<p>firewall-cmd –zone=public –remove-port=100-500/tcp –permanent<br>firewall-cmd –reload<br>三、开放或限制IP<br>1、限制IP地址访问<br>（1）比如限制IP为192.168.0.200的地址禁止访问80端口即禁止访问机器</p>
+<p>firewall-cmd –permanent –add-rich-rule=”rule family=”ipv4” source address=”192.168.0.200” port protocol=”tcp” port=”80” reject”</p>
+<p>（2）重新载入一下防火墙设置，使设置生效</p>
+<p>firewall-cmd –reload<br>（3）查看已经设置的规则</p>
+<p>firewall-cmd –zone=public –list-rich-rules</p>
+<p>2、解除IP地址限制<br>（1）解除刚才被限制的192.168.0.200</p>
+<p>firewall-cmd –permanent –add-rich-rule=”rule family=”ipv4” source address=”192.168.0.200” port protocol=”tcp” port=”80” accept”</p>
+<p>（2）重新载入一下防火墙设置，使设置生效</p>
+<p>firewall-cmd –reload<br>（3）再查看规则设置发现已经没有192.168.0.200的限制了</p>
+<p>firewall-cmd –zone=public –list-rich-rules</p>
+<p>如设置未生效，可尝试直接编辑规则文件，删掉原来的设置规则，重新载入一下防火墙即可</p>
+<p>vi /etc/firewalld/zones/public.xml</p>
+<p>3、限制IP地址段<br>（1）如我们需要限制10.0.0.0-10.0.0.255这一整个段的IP，禁止他们访问</p>
+<p>firewall-cmd –permanent –add-rich-rule=”rule family=”ipv4” source address=”10.0.0.0/24” port protocol=”tcp” port=”80” reject”<br>其中10.0.0.0/24表示为从10.0.0.0这个IP开始，24代表子网掩码为255.255.255.0，共包含256个地址，即从0-255共256个IP，即正好限制了这一整段的IP地址，具体的设置规则可参考下表</p>
+<p>（2）重新载入一下防火墙设置，使设置生效</p>
+<p>firewall-cmd –reload<br>（3）查看规则，确认是否生效</p>
+<p>firewall-cmd –zone=public –list-rich-rules<br>（4）同理，打开限制为</p>
+<p>firewall-cmd –permanent –add-rich-rule=”rule family=”ipv4” source address=”10.0.0.0/24” port protocol=”tcp” port=”80” accept”<br>firewall-cmd –reload一、查看防火墙状态<br>1、首先查看防火墙是否开启，如未开启，需要先开启防火墙并作开机自启</p>
 <p>systemctl status firewalld</p>
 <p>开启防火墙并设置开机自启</p>
 <p>systemctl start firewalld<br>systemctl enable firewalld<br>一般需要重启一下机器，不然后面做的设置可能不会生效</p>
@@ -124,7 +177,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/04/linux防火墙命令/" data-id="ck3qvdx990004nkb5badmtt91" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/12/04/linux-firewall/" data-id="ck3qvdx950002nkb5hmv02v5z" class="article-share-link">Share</a>
       
       
     </footer>
@@ -133,19 +186,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2019/12/04/linux-firewall/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          linux firewall
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/04/25/SpringCloud总结-2/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/12/04/linux防火墙命令/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">SpringCloud总结-2</div>
+      <div class="article-nav-title"></div>
     </a>
   
 </nav>
