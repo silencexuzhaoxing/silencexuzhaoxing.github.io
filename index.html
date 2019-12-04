@@ -62,6 +62,126 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-linux防火墙命令" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/04/linux防火墙命令/" class="article-date">
+  <time datetime="2019-12-04T05:35:39.291Z" itemprop="datePublished">2019-12-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一、查看防火墙状态<br>1、首先查看防火墙是否开启，如未开启，需要先开启防火墙并作开机自启</p>
+<p>systemctl status firewalld</p>
+<p>开启防火墙并设置开机自启</p>
+<p>systemctl start firewalld<br>systemctl enable firewalld<br>一般需要重启一下机器，不然后面做的设置可能不会生效</p>
+<p>二、开放或限制端口<br>1、开放端口<br>（1）如我们需要开启XShell连接时需要使用的22端口</p>
+<p>firewall-cmd –zone=public –add-port=22/tcp –permanent</p>
+<p>其中–permanent的作用是使设置永久生效，不加的话机器重启之后失效</p>
+<p>（2）重新载入一下防火墙设置，使设置生效</p>
+<p>firewall-cmd –reload</p>
+<p>（3）可通过如下命令查看是否生效</p>
+<p>firewall-cmd –zone=public –query-port=22/tcp</p>
+<p>（4）如下命令可查看当前系统打开的所有端口</p>
+<p>firewall-cmd –zone=public –list-ports</p>
+<p>2、限制端口<br>（1）比如我们现在需要关掉刚刚打开的22端口</p>
+<p>firewall-cmd –zone=public –remove-port=22/tcp –permanent</p>
+<p>（2）重新载入一下防火墙设置，使设置生效</p>
+<p>firewall-cmd –reload</p>
+<p>（3）再去查看系统所有开放的端口，已经看到没有22端口了</p>
+<p>firewall-cmd –zone=public –list-ports</p>
+<p>3、批量开放或限制端口<br>（1）批量开放端口，如从100到500这之间的端口我们全部要打开</p>
+<p>firewall-cmd –zone=public –add-port=100-500/tcp –permanent</p>
+<p>（2）重新载入一下防火墙设置，使设置生效</p>
+<p>firewall-cmd –reload</p>
+<p>（3）查看系统所有开放的端口，可以看到从100到500的端口已被全部开放</p>
+<p>firewall-cmd –zone=public –list-ports</p>
+<p>（4）同理，批量限制端口为</p>
+<p>firewall-cmd –zone=public –remove-port=100-500/tcp –permanent<br>firewall-cmd –reload<br>三、开放或限制IP<br>1、限制IP地址访问<br>（1）比如限制IP为192.168.0.200的地址禁止访问80端口即禁止访问机器</p>
+<p>firewall-cmd –permanent –add-rich-rule=”rule family=”ipv4” source address=”192.168.0.200” port protocol=”tcp” port=”80” reject”</p>
+<p>（2）重新载入一下防火墙设置，使设置生效</p>
+<p>firewall-cmd –reload<br>（3）查看已经设置的规则</p>
+<p>firewall-cmd –zone=public –list-rich-rules</p>
+<p>2、解除IP地址限制<br>（1）解除刚才被限制的192.168.0.200</p>
+<p>firewall-cmd –permanent –add-rich-rule=”rule family=”ipv4” source address=”192.168.0.200” port protocol=”tcp” port=”80” accept”</p>
+<p>（2）重新载入一下防火墙设置，使设置生效</p>
+<p>firewall-cmd –reload<br>（3）再查看规则设置发现已经没有192.168.0.200的限制了</p>
+<p>firewall-cmd –zone=public –list-rich-rules</p>
+<p>如设置未生效，可尝试直接编辑规则文件，删掉原来的设置规则，重新载入一下防火墙即可</p>
+<p>vi /etc/firewalld/zones/public.xml</p>
+<p>3、限制IP地址段<br>（1）如我们需要限制10.0.0.0-10.0.0.255这一整个段的IP，禁止他们访问</p>
+<p>firewall-cmd –permanent –add-rich-rule=”rule family=”ipv4” source address=”10.0.0.0/24” port protocol=”tcp” port=”80” reject”<br>其中10.0.0.0/24表示为从10.0.0.0这个IP开始，24代表子网掩码为255.255.255.0，共包含256个地址，即从0-255共256个IP，即正好限制了这一整段的IP地址，具体的设置规则可参考下表</p>
+<p>（2）重新载入一下防火墙设置，使设置生效</p>
+<p>firewall-cmd –reload<br>（3）查看规则，确认是否生效</p>
+<p>firewall-cmd –zone=public –list-rich-rules<br>（4）同理，打开限制为</p>
+<p>firewall-cmd –permanent –add-rich-rule=”rule family=”ipv4” source address=”10.0.0.0/24” port protocol=”tcp” port=”80” accept”<br>firewall-cmd –reload</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/12/04/linux防火墙命令/" data-id="ck3qvb0sv00030cb5cfzm2cn3" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-SpringCloud总结-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/25/SpringCloud总结-2/" class="article-date">
+  <time datetime="2019-04-25T02:29:03.000Z" itemprop="datePublished">2019-04-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/25/SpringCloud总结-2/">SpringCloud总结-2</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-Hystix"><a href="#1-Hystix" class="headerlink" title="1.Hystix"></a>1.Hystix</h1><h2 id="1-1-简介"><a href="#1-1-简介" class="headerlink" title="1.1.简介"></a>1.1.简介</h2><p>Hystix，即熔断器。</p>
+<p>主页：<a href="https://github.com/Netflix/Hystrix/" target="_blank" rel="noopener">https://github.com/Netflix/Hystrix/</a></p>
+<p>Hystix是Netflix开源的一个延迟和容错库，用于隔离访问远程服务、第三方库，防止出现级联失败。</p>
+<p><img src="/2019/04/25/SpringCloud总结-2/1525658562507.png" alt="1525658562507"></p>
+<h2 id="1-2-熔断器的工作机制："><a href="#1-2-熔断器的工作机制：" class="headerlink" title="1.2.熔断器的工作机制："></a>1.2.熔断器的工作机制：</h2><p><img src="/2019/04/25/SpringCloud总结-2/1525658640314.png" alt="1525658640314"></p>
+<p>正常工作的情况下，客户端请求调用服务API接口：</p>
+<p><img src="/2019/04/25/SpringCloud总结-2/1525658906255.png" alt="1525658906255"></p>
+<p>当有服务出现异常时，直接进行失败回滚，服务降级处理：</p>
+<p><img src="/2019/04/25/SpringCloud总结-2/1525658983518.png" alt="1525658983518"></p>
+<p>当服务繁忙时，如果服务出现异常，不是粗暴的直接报错，而是返回一个友好的提示，虽然拒绝了用户的访问，但是会返回一个结果。</p>
+<p>这就好比去买鱼，平常超市买鱼会额外赠送杀鱼的服务。等到逢年过节，超时繁忙时，可能就不提供杀鱼服务了，这就是服务的降级。</p>
+<p>系统特别繁忙时，一些次要服务暂时中断，优先保证主要服务的畅通，一切资源优先让给主要服务来使用，在双十一、618时，京东天猫都会采用这样的策略。</p>
+<h2 id="1-3-动手实践"><a href="#1-3-动手实践" class="headerlink" title="1.3.动手实践"></a>1.3.动手实践</h2><h3 id="1-3-1-引入依赖"><a href="#1-3-1-引入依赖" class="headerlink" title="1.3.1.引入依赖"></a>1.3.1.引入依赖</h3><p>首先在user-consumer中引入Hystix依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-hystrix<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="1-3-2-开启熔断"><a href="#1-3-2-开启熔断" class="headerlink" title="1.3.2.开启熔断"></a>1.3.2.开启熔断</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/04/25/SpringCloud总结-2/" data-id="ck3qvb0sp00010cb5ugmchf18" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-SpringCloud总结-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/04/24/SpringCloud总结-1/" class="article-date">
@@ -361,7 +481,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/24/SpringCloud总结-1/" data-id="cjuuzsst80002dcb5l6jbaq9g" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/24/SpringCloud总结-1/" data-id="ck3qvb0u300040cb5rfv90n7r" class="article-share-link">Share</a>
       
       
     </footer>
@@ -397,7 +517,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/24/Hello/" data-id="cjuuzsssc0000dcb5qez0lckd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/24/Hello/" data-id="ck3qvb0sk00000cb5dbrrozx7" class="article-share-link">Share</a>
       
       
     </footer>
@@ -442,7 +562,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/24/hello-world/" data-id="cjuuzsssj0001dcb5pkyj3c4y" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/24/hello-world/" data-id="ck3qvb0ss00020cb55pgwakjo" class="article-share-link">Share</a>
       
       
     </footer>
@@ -470,7 +590,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li></ul>
     </div>
   </div>
 
@@ -481,6 +601,14 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/12/04/linux防火墙命令/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/25/SpringCloud总结-2/">SpringCloud总结-2</a>
+          </li>
         
           <li>
             <a href="/2019/04/24/SpringCloud总结-1/">SpringCloud总结-1</a>
